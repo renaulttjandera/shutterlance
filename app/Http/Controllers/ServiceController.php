@@ -36,7 +36,7 @@ class ServiceController extends Controller
     public function store(Request $request) {
       $validatedData = $request->validate([
         "name" => "required",
-        "description" => "required|max:1000",
+        "description" => "required|max:10000",
         "sample1" => "required|image|file|mimes:png,jpg,jpeg|max:10240",
         "sample2" => "image|file|mimes:png,jpg,jpeg|max:10240",
         "sample3" => "image|file|mimes:png,jpg,jpeg|max:10240",
@@ -103,8 +103,8 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service) {
       $validatedData = $request->validate([
         "name" => "required",
-        "description" => "required|max:1000",
-        "sample1" => "required|image|file|mimes:png,jpg,jpeg|max:10240",
+        "description" => "required|max:10000",
+        "sample1" => "image|file|mimes:png,jpg,jpeg|max:10240",
         "sample2" => "image|file|mimes:png,jpg,jpeg|max:10240",
         "sample3" => "image|file|mimes:png,jpg,jpeg|max:10240",
         "sample4" => "image|file|mimes:png,jpg,jpeg|max:10240",

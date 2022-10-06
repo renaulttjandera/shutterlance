@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -181,5 +181,302 @@
       }
     }
   </script>
+</body>
+</html> --}}
+
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+
+    <!-- My CSS -->
+    <link rel="stylesheet" href="{{url('stylesheet/style.css')}}" />
+
+    <!-- My Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Viga&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    {{-- <link 
+  href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css" 
+  rel="stylesheet"  type='text/css'> --}}
+
+    <title>Edit Service - Snapshot Corporation</title>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="{{url('/')}}">Snapshot Corporation</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ml-auto text-center">
+            <a class="nav-item nav-link" href="/">Home</a>
+            <a class="nav-item nav-link" href="/explore">Explore</a>
+            @if(Auth::user())
+            <a class="nav-item nav-link" href="/dashboard">Dashboard</a>
+            <a href="/logout" class="nav-item button btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="/logout" method="POST">
+              @csrf
+            </form>
+            @endif
+            @if(!Auth::user())
+            <a href="/login" class="nav-item nav-link">Login</a>
+            <a href="/register?role=0" class="nav-item button btn btn-primary">Register</a>
+            @endif
+            
+          </div>
+        </div>
+      </div>
+    </nav>
+<div class="create mt-3 mb-5 page">
+  <div class="container">
+    <div class="row">
+      <div class="col-8">
+        <h1 class="mb-3">Edit Service</h1>
+        <form method="post" action="/services/edit/{{$service->id}}" enctype="multipart/form-data">
+          @csrf
+          @method('put')
+          <div class="form-group">
+            <label for="name">Service Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{old("name", $service->name)}}">
+            @error('name')
+            <div class="invalid-feedback">
+              {{$message}}
+            </div>
+            @enderror
+          </div>
+          <div class="form-group">
+            <label for="description">Service Description <span class="text-danger">*</span></label>
+            <textarea type="text" class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="5">{{old("description", $service->description)}}</textarea>
+            @error('description')
+            <div class="invalid-feedback">
+              {{$message}}
+            </div>
+            @enderror
+          </div>
+          
+          <div class="form-group">
+            <label for="validationDefaultUsername">Price <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroupPrepend2">Rp</span>
+              </div>
+              <input type="text" class="form-control @error('price') is-invalid @enderror" id="price" name="price" value="{{old("price", $service->price)}}">
+              @error('price')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sample1">Image Sample #1</label>
+            @if($service->sample1)
+    <img src="{{asset('storage/' . $service->sample1)}}" class="sample1-preview" width="300" style="display: block">
+    @else
+    <img class="sample1-preview">
+    @endif
+            <div class="custom-file">
+              <input type="file" class="custom-file-input @error('sample1') is-invalid @enderror" id="sample1" name="sample1" onchange="previewImage1()">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+              @error('sample1')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sample2">Image Sample #2</label>
+            @if($service->sample2)
+    <img src="{{asset('storage/' . $service->sample2)}}" class="sample2-preview" width="300" style="display: block">
+    @else
+    <img class="sample2-preview">
+    @endif
+            <div class="custom-file">
+              <input type="file" class="custom-file-input @error('sample2') is-invalid @enderror" id="sample2" name="sample2" onchange="previewImage2()">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+              @error('sample2')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sample3">Image Sample #3</label>
+            @if($service->sample3)
+    <img src="{{asset('storage/' . $service->sample3)}}" class="sample3-preview" width="300" style="display: block">
+    @else
+    <img class="sample3-preview">
+    @endif
+            <div class="custom-file">
+              <input type="file" class="custom-file-input @error('sample3') is-invalid @enderror" id="sample3" name="sample3" onchange="previewImage3()">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+              @error('sample3')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sample4">Image Sample #4</label>
+            @if($service->sample4)
+    <img src="{{asset('storage/' . $service->sample4)}}" class="sample4-preview" width="300" style="display: block">
+    @else
+    <img class="sample4-preview">
+    @endif
+            <div class="custom-file">
+              <input type="file" class="custom-file-input @error('sample4') is-invalid @enderror" id="sample4" name="sample4" onchange="previewImage4()">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+              @error('sample4')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="sample5">Image Sample #5</label>
+            @if($service->sample5)
+    <img src="{{asset('storage/' . $service->sample5)}}" class="sample5-preview" width="300" style="display: block">
+    @else
+    <img class="sample5-preview">
+    @endif
+            <div class="custom-file">
+              <input type="file" class="custom-file-input @error('sample5') is-invalid @enderror" id="sample5" name="sample5" onchange="previewImage5()">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+              @error('sample5')
+              <div class="invalid-feedback">
+                {{$message}}
+              </div>
+              @enderror
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address (Contact) <span class="text-">*</span></label>
+            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{old("email", $service->email)}}">
+            @error('email')
+            <div class="invalid-feedback">
+              {{$message}}
+            </div>
+            @enderror
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone Number (Contact) <span class="text-">*</span></label>
+            <input type="number" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{old("phone", $service->phone)}}">
+            @error('phone')
+            <div class="invalid-feedback">
+              {{$message}}
+            </div>
+            @enderror
+          </div>
+
+          
+          
+          <button type="submit" class="btn btn-primary">Edit Service <i class="fas fa-edit"></i></button>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="bg-dark py-3 text-center text-light">
+      Copyright &copy; 2022 Snapshot Corporation. All rights reserved.
+    </footer>
+
+<!-- JQuery, Popper, Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<script>
+  $(document).on('change', '.custom-file-input', function (event) {
+$(this).next('.custom-file-label').html(event.target.files[0].name);
+})
+</script>
+
+<script>
+  function previewImage1() {
+    const sample = document.querySelector("#sample1");
+    const samplePreview = document.querySelector(".sample1-preview");
+
+    samplePreview.style.display = "block";
+    samplePreview.style.width = "300px";
+    const ofReader = new FileReader();
+    ofReader.readAsDataURL(sample.files[0]);
+    ofReader.onload = function(oFREvent) {
+      samplePreview.src = oFREvent.target.result;
+    }
+  }
+
+  function previewImage2() {
+    const sample = document.querySelector("#sample2");
+    const samplePreview = document.querySelector(".sample2-preview");
+
+    samplePreview.style.display = "block";
+    samplePreview.style.width = "300px";
+    const ofReader = new FileReader();
+    ofReader.readAsDataURL(sample.files[0]);
+    ofReader.onload = function(oFREvent) {
+      samplePreview.src = oFREvent.target.result;
+    }
+  }
+
+  function previewImage3() {
+    const sample = document.querySelector("#sample3");
+    const samplePreview = document.querySelector(".sample3-preview");
+
+    samplePreview.style.display = "block";
+    samplePreview.style.width = "300px";
+    const ofReader = new FileReader();
+    ofReader.readAsDataURL(sample.files[0]);
+    ofReader.onload = function(oFREvent) {
+      samplePreview.src = oFREvent.target.result;
+    }
+  }
+
+  function previewImage4() {
+    const sample = document.querySelector("#sample4");
+    const samplePreview = document.querySelector(".sample4-preview");
+
+    samplePreview.style.display = "block";
+    samplePreview.style.width = "300px";
+    const ofReader = new FileReader();
+    ofReader.readAsDataURL(sample.files[0]);
+    ofReader.onload = function(oFREvent) {
+      samplePreview.src = oFREvent.target.result;
+    }
+  }
+
+  function previewImage5() {
+    const sample = document.querySelector("#sample5");
+    const samplePreview = document.querySelector(".sample5-preview");
+
+    samplePreview.style.display = "block";
+    samplePreview.style.width = "300px";
+    const ofReader = new FileReader();
+    ofReader.readAsDataURL(sample.files[0]);
+    ofReader.onload = function(oFREvent) {
+      samplePreview.src = oFREvent.target.result;
+    }
+  }
+</script>
 </body>
 </html>

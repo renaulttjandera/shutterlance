@@ -43,9 +43,9 @@
       <td>{{$info->description}}</td>
       <td>{{$info->school}}</td>
       <td>{{$info->birthdate}}</td>
-      <td>CV</td>
-      <td>Portfolio</td>
-      <td>MoU</td>
+      <td><a href="{{asset('storage/' . $info->cv)}}">CV</a></td>
+      <td><a href="{{asset('storage/' . $info->portfolio)}}">Portfolio</a></td>
+      <td><a href="{{asset('storage/' . $info->mou)}}">MoU</a></td>
       <td>
         <form action="/accept" method="post">
         @csrf

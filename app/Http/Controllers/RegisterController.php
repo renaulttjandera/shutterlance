@@ -14,9 +14,9 @@ class RegisterController extends Controller
         return redirect('/register?role=0');
       }
       if($_GET["role"] == 0) {
-        $role = "Customer";
+        $role = "a Customer";
       } else if($_GET["role"] == 1) {
-        $role = "Freelancer";
+        $role = "a Talent";
       } else {
         return redirect('/register?role=0');
       }
@@ -40,8 +40,9 @@ class RegisterController extends Controller
       $validatedData += array("role" => $_GET["role"]);
       $validatedData += array("info" => 0);
       $validatedData += array("status" => 0);
+
       User::create($validatedData);
 
-      return redirect('login')->with('success', 'Register successful! Please login');
+      return redirect('login')->with('success', 'Register successful! Please login.');
     }
 }

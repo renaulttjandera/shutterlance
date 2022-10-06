@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Service;
 use App\Models\User;
 use App\Models\Info;
+use DomPDF;
 
 class AdminController extends Controller
 {
